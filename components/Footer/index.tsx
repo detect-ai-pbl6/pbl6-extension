@@ -1,4 +1,6 @@
+import React, { useEffect, useState } from "react";
 import styles from './Footer.module.css';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -10,8 +12,8 @@ export default function Footer() {
       >
         Footer V.0.0.1
         <span className={styles.logo}>
-          <img
-            src="icons/icon16.png"
+          <Image
+            src="/icons/icon16.png" // Lưu ý: Đường dẫn phải bắt đầu bằng "/"
             alt="Logo"
             width={16}
             height={16}

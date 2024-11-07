@@ -1,7 +1,7 @@
 .container {
   width: 460px;
   height: 520px;
-  background: linear-gradient(153deg, rgb(116, 56, 216), rgb(18, 150, 170) 74%);
+  background: linear-gradient(153deg, rgb(229, 155, 255), rgb(178, 255, 237) 74%);
   padding: 5px;
   color: white;
 }
@@ -53,7 +53,7 @@
 
 .uploadArea {
   width: 90%;
-  height: 270px;
+  height: 300px;
   margin: 10px 20px;
   background-color: rgba(0, 0, 0, 0.3);
   background-size: cover;

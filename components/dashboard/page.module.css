@@ -1,0 +1,71 @@
+.dashboard {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.title {
+    font-size: 2.5rem; /* Thay đổi kích thước tiêu đề */
+}
+
+.dropdowns {
+    display: flex;
+    gap: 1rem;
+}
+
+.select-container {
+    position: relative;
+    width: 100px; /* Chiều rộng có thể điều chỉnh */
+}
+
+.select-trigger {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #4f46e5; /* Màu viền */
+    border-radius: 8px; /* Đường viền bo tròn */
+    background-color: #ffffff; /* Màu nền */
+    cursor: pointer;
+    transition: border-color 0.3s; /* Hiệu ứng chuyển tiếp */
+    font-size: 14px; /* Thay đổi cỡ chữ */
+}
+
+.select-trigger:hover {
+    border-color: #3b82f6; /* Màu viền khi hover */
+}
+
+.select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%; /* Chiều rộng 100% */
+    border: 2px solid #4f46e5; /* Màu viền */
+    border-radius: 8px; /* Đường viền bo tròn */
+    background-color: #ffffff; /* Màu nền */
+    max-height: 200px; /* Chiều cao tối đa */
+    overflow-y: auto; /* Thanh cuộn dọc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+    z-index: 10; /* Đảm bảo nó hiển thị trên các phần tử khác */
+}
+
+.select-option {
+    padding-left: 10px; /* Padding cho các mục */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp */
+    cursor: pointer;
+    font-size: 14px; /* Cỡ chữ nhỏ hơn cho các mục */
+}
+
+.select-option:hover {
+    background-color: #e5e7eb; /* Màu nền khi hover */
+}
+
+.chart-container {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,86 @@
+.container {
+    width: 460px; /* Chiều rộng tối đa */
+}
+
+.navbar {
+    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử trong một hàng */
+    justify-content: space-between; /* Phân phối không gian giữa các phần tử */
+    align-items: center; /* Canh giữa theo chiều dọc */
+    background: linear-gradient(153deg, rgb(229, 155, 255), rgb(203, 205, 245) );
+    color: black; /* Màu chữ trắng */
+}
+
+.logo {
+    display: flex;
+    align-items: center; /* Canh giữa logo và tên công ty */
+}
+
+.logo img {
+    margin-right: 10px; /* Khoảng cách giữa logo và tên công ty */
+}
+
+.navLinks {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navLinks a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-size: 16px; /* Kích thước chữ mặc định */
+    transition: color 0.3s, transform 0.3s; /* Thêm hiệu ứng cho màu và kích thước */
+}
+
+.navLinks a:hover {
+    color: white; /* Màu chữ khi hover */
+    transform: scale(1.1); /* Phóng to chữ khi hover */
+}
+
+.authLinks {
+    display: flex; /* Hiển thị các liên kết xác thực theo hàng */
+    align-items: center; /* Canh giữa theo chiều dọc */
+    gap: 16px; /* Khoảng cách giữa các liên kết xác thực */
+}
+
+.loginLink, .logoutLink {
+    border: none;
+    border-radius: 4px; /* Bo góc cho nút */
+    background-color: #61dafb; /* Màu nền */
+    color: black; /* Màu chữ đen */
+    padding: 8px; /* Padding cho nút */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+    font-size: 14px; /* Kích thước chữ cho nút */
+    font-weight: 600; /* Độ đậm chữ */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.loginLink:hover, .logoutLink:hover {
+    background-color: white; /* Nền trắng khi hover */
+    color: #61dafb; /* Màu chữ khi hover */
+}
+
+.signupButton {
+    border: none;
+    border-radius: 4px;
+    background-color: black; /* Màu nền đen */
+    color: white; /* Màu chữ trắng */
+    padding: 8px; /* Padding cho nút */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+    margin: 8px 16px; /* Padding cho nút */
+    font-size: 14px; /* Kích thước chữ cho nút */
+    font-weight: 600; /* Độ đậm chữ */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.signupButton:hover {
+    background-color: white; /* Màu xám khi hover */
+    color: black; /* Giữ màu chữ trắng */
+}
+
+.username {
+    font-size: 14px; /* Kích thước chữ cho tên người dùng */
+}
