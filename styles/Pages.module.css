@@ -3,7 +3,7 @@
   height: 520px;
   background: linear-gradient(153deg, rgb(229, 155, 255), rgb(178, 255, 237) 74%);
   padding: 5px;
-  color: white;
+  color: #000000;
 }
 
 .main {
@@ -92,6 +92,13 @@
 
 .uploadPrompt {
   color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.uploadPromptMess {
+  color: #005600;
   font-size: 14px;
   font-weight: bold;
   text-align: center;

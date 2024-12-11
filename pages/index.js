@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import Index from '../components/Index';
 import New from '../components/New';
 import Login from '../components/Login';
@@ -23,7 +24,7 @@ export default function Home() {
       <Header user={user} setUser={setUser} navigateToPage={navigateToPage} />
       {activePage === 'index' && <Index navigateToPage={navigateToPage} />}
       {activePage === 'new' && <New navigateToPage={navigateToPage} />}
-      {activePage === 'login' && <Login onLoginSuccess={handleLoginSuccess} navigateToPage={navigateToPage} />}
+      {activePage === 'login' && <Login onLoginSuccess={handleLoginSuccess} navigateToPage={navigateToPage}/>}
       {activePage === 'register' && <Register navigateToPage={navigateToPage} />}
     </>
   );

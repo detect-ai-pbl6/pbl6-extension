@@ -42,14 +42,12 @@ const Header = ({ user, setUser, navigateToPage }) => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     localStorage.removeItem("expiration");
+    window.location.reload();
   };
 
   return (
     <div className={styles.container}>
       <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          <Image src="/logo 1.png" width={50} height={50} alt="star logo" />
-        </div>
           <ul className={styles.navLinks}>
             <li>
               <a href="#" onClick={() => navigateToPage('index')}>Home</a>

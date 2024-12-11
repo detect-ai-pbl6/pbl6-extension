@@ -189,3 +189,10 @@
 .social-button.github:hover {
   background-color: #3a3f47;
 }
+
+.error-message {
+  color: #d9534f;
+  font-size: 12px;
+  margin-top: 0px;
+  font-weight: 500;
+}
