@@ -13,6 +13,29 @@ export default function Login({onLoginSuccess, navigateToPage}) {
   const [providers, setProvider] = useState([]);
   
 
+  function saveTokensToStorage(access, refresh, expiration, api_key) {
+    const data = {
+        accessToken: access,
+        refreshToken: refresh,
+        expirationTime: expiration,
+        apiKey: api_key,
+    };
+
+    chrome.runtime.sendMessage(
+      { type: "STORAGE_UPDATED", payload: data },
+      (response) => {
+          if (chrome.runtime.lastError) {
+              console.error("Error during storage update:", chrome.runtime.lastError.message);
+          } else {
+              console.log("STORAGE_UPDATED response:", response?.message);
+          }
+      }
+    );
+  }
+
+  // Gọi hàm với giá trị cụ thể
+  // saveTokensToStorage("myAccessToken", "myRefreshToken", 3600, "myApiKey");
+
   useEffect(() => {
     const fetchProvider = async () => {
       try {
@@ -56,9 +79,8 @@ export default function Login({onLoginSuccess, navigateToPage}) {
 
       const data = await res.json();
       const expirationTime = Date.now() + 300000;
-      localStorage.setItem("access", data.access);
-      localStorage.setItem("refresh", data.refresh);
-      localStorage.setItem("expiration", expirationTime.toString());
+      console.log("data: ", data);
+      saveTokensToStorage(data.access, data.refresh, expirationTime, data.api_key);
 
       alert(data.message || "Login successful.");
       onLoginSuccess(data.user);
@@ -90,235 +112,11 @@ export default function Login({onLoginSuccess, navigateToPage}) {
     await handleLogin(email, password);
   };
 
-  // const handleSocialLogin = async (id) => {
-  //   const form = document.createElement("form");
-  //   form.style.display = "none";
-  //   form.method = "POST";
-  //   form.action = `${apiUrl}/auth/login/socials`;
-  //   const data = {
-  //     provider: id,
-  //     callback_url: "http://localhost:3000",
-  //   };
-  //   console.log(data);
-
-  //   Object.entries(data).forEach(([k, v]) => {
-  //     const input = document.createElement("input");
-  //     input.name = k;
-  //     input.value = v;
-  //     form.appendChild(input);
-  //   });
-  //   document.body.appendChild(form);
-  //   form.submit();
-  // }
-// Hàm trích xuất các tham số OAuth từ URL
-function extractOAuthParams(url) {
-  const urlParams = new URLSearchParams(`https://accounts.google.com`);
-
-  // Trích xuất các tham số cần thiết từ URL
-  const clientId = urlParams.get('client_id');
-  const redirectUri = urlParams.get('redirect_uri');
-  const scope = urlParams.get('scope');
-  const responseType = urlParams.get('response_type');
-  const state = urlParams.get('state');
-  const accessType = urlParams.get('access_type');
-  const codeChallengeMethod = urlParams.get('code_challenge_method');
-  const codeChallenge = urlParams.get('code_challenge');
-  const service = urlParams.get('service');
-  const o2v = urlParams.get('o2v');
-  const ddm = urlParams.get('ddm');
-  const flowName = urlParams.get('flowName');
-
-  // Log các tham số để kiểm tra
-  console.log("client_id:", clientId);
-  console.log("redirect_uri:", redirectUri);
-  console.log("scope:", scope);
-  console.log("response_type:", responseType);
-  console.log("state:", state);
-  console.log("access_type:", accessType);
-  console.log("code_challenge_method:", codeChallengeMethod);
-  console.log("code_challenge:", codeChallenge);
-  console.log("service:", service);
-  console.log("o2v:", o2v);
-  console.log("ddm:", ddm);
-  console.log("flowName:", flowName);
-
-  // Trả về đối tượng chứa tất cả các tham số
-  return {
-    clientId,
-    redirectUri,
-    scope,
-    responseType,
-    state,
-    accessType,
-    codeChallengeMethod,
-    codeChallenge,
-    service,
-    o2v,
-    ddm,
-    flowName
+  const handleSocialLogin = (id) => {
+    const callbackUrl = "https://pbl6-frontend-hoai-baos-projects.vercel.app/login";
+    window.open(callbackUrl, "_blank");
   };
-}
-
-const handleSocialLogin = async (id) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const url = tabs[0].url;
-    console.log("url: ", url);
-    const oauthParams = extractOAuthParams(url);
-
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${oauthParams.clientId}&redirect_uri=${oauthParams.redirectUri}&scope=${oauthParams.scope}&response_type=${oauthParams.responseType}&state=${oauthParams.state}&access_type=${oauthParams.accessType}&code_challenge_method=${oauthParams.codeChallengeMethod}&code_challenge=${oauthParams.codeChallenge}&service=${oauthParams.service}&o2v=${oauthParams.o2v}&ddm=${oauthParams.ddm}&flowName=${oauthParams.flowName}`;
-
-    chrome.identity.launchWebAuthFlow(
-      {
-        url: authUrl,
-        interactive: true,
-      },
-      async (redirectUrl) => {
-        if (redirectUrl) {
-          const urlParams = new URLSearchParams(new URL(redirectUrl).search);
-          const token = urlParams.get("token");
-
-          if (token) {
-            const response = await fetch(`${apiUrl}/auth/tokens`, {
-              credentials: "include",
-            });
-
-            if (response.ok) {
-              const data = await response.json();
-              const expirationTime = Date.now() + 300000;
-              localStorage.setItem("access", data.access);
-              localStorage.setItem("refresh", data.refresh);
-              localStorage.setItem("expiration", expirationTime.toString());
-
-              console.log("Login successful");
-              alert(data.message || "Login successful.");
-              onLoginSuccess(data.user);
-
-              chrome.windows.getCurrent({}, (currentWindow) => {
-                chrome.windows.remove(currentWindow.id);
-              });
-            } else {
-              console.error("Error fetching tokens");
-            }
-          } else {
-            console.error("Failed to get token from callback URL");
-          }
-        } else {
-          console.error("Authentication failed");
-        }
-      }
-    );
-  });
-};
-
-
-
-
-  // const handleSocialLogin = async (id) => {
-  //   const redirectUri = "http://localhost:3000"; // URL callback mà bạn sẽ nhận lại thông tin
-  //   // const authUrl = `${apiUrl}/auth/login/socials?provider=${id}&callback_url=${redirectUri}`;
-  //   const authUrl = `${apiUrl}/auth/login/socials`;
-  //   console.log('Auth URL:', redirectUri);
-
-  //   // Mở OAuth flow mà không chuyển hướng trang
-  //   chrome.identity.launchWebAuthFlow(
-  //     {
-  //       url: redirectUri,
-  //       interactive: true, // Đảm bảo là pop-up sẽ xuất hiện để người dùng đăng nhập
-  //     },
-  //     async (redirectUrl) => {
-  //       // redirectUrl sẽ chứa URL trả về sau khi đăng nhập thành công
-  //       if (redirectUrl) {
-  //         // Trích xuất thông tin token từ redirectUrl
-  //         const urlParams = new URLSearchParams(new URL(redirectUrl).search);
-  //         const token = urlParams.get('token'); // giả sử token là tham số trong URL
-  //         console.log('urlParams: ',urlParams);
-  //         console.log('token: ',token);
   
-  //         if (token) {
-  //           // Sau khi có token, bạn có thể gọi API để lấy dữ liệu người dùng
-  //           const response = await fetch(`${apiUrl}/auth/tokens`, {
-  //             credentials: 'include',
-  //           });
-  
-  //           if (response.ok) {
-  //             const data = await response.json();
-  //             const expirationTime = Date.now() + 300000;
-  //             localStorage.setItem('access', data.access);
-  //             localStorage.setItem('refresh', data.refresh);
-  //             localStorage.setItem('expiration', expirationTime.toString());
-  
-  //             console.log('Login successful');
-  //             alert(data.message || 'Login successful.');
-  //             onLoginSuccess(data.user);
-  //           } else {
-  //             console.error('Error fetching tokens');
-  //           }
-  //         }
-  //       } else {
-  //         console.error('Authentication failed');
-  //       }
-  //     }
-  //   );
-  // };
-  
-
-
-
-  // const extensionId = chrome.runtime.id;
-  // const callbackUrl = `chrome-extension://${extensionId}/callback`;
-  // console.log("callbackUrl:", callbackUrl);
-  // const port = chrome.runtime.connect({ name: "social-login" });
-
-  // const handleSocialLogin = async (id) => {
-  //   console.log("handleSocialLogin");
-
-  //   const form = document.createElement("form");
-  //   form.style.display = "none";
-  //   form.method = "POST";
-  //   form.action = `${apiUrl}/auth/login/socials`;
-
-  //   const data = {
-  //     provider: id,
-  //     callback_url: callbackUrl,
-  //   };
-
-  //   Object.entries(data).forEach(([k, v]) => {
-  //     const input = document.createElement("input");
-  //     input.name = k;
-  //     input.value = v;
-  //     form.appendChild(input);
-  //   });
-
-  //   document.body.appendChild(form);
-  //   form.submit();
-
-  //   // Sau khi đăng nhập, gửi thông điệp tới extension
-  //   const response = await fetch(`${apiUrl}/auth/login/socials`, {
-  //     method: "POST",
-  //     body: JSON.stringify(data),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-
-  //   // const responseData = await response.json();
-  //   // console.log(responseData);  // Kiểm tra dữ liệu trả về
-  //   if (!response.ok) {
-  //     const errorText = await response.text();  // Đọc nội dung HTML trả về
-  //     console.error("API Error:", errorText);    // In ra nội dung HTML để biết lỗi
-  //     throw new Error(`Error: ${response.status} - ${errorText}`);
-  //   }
-
-  //   if (response.ok) {
-  //     // Gửi thông điệp qua kết nối
-  //     port.postMessage({
-  //       type: 'SOCIAL_LOGIN_SUCCESS',
-  //       data: responseData,
-  //     });
-  //   }
-  // };
-
-
   return (
     <div className={styles.container}>
         <div className={styles['form-container']}>

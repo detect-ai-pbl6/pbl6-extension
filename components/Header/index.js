@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import styles from '../../styles/Navbar.module.css';
 
 const Header = ({ user, setUser, navigateToPage }) => {
@@ -7,11 +6,10 @@ const Header = ({ user, setUser, navigateToPage }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const accessToken = localStorage.getItem("access");
-      const expirationTime = localStorage.getItem("expiration");
+      chrome.storage.local.get(['accessToken', 'expirationTime'], async (result) => {
+        const { accessToken, expirationTime } = result;
 
-      if (accessToken) {
-        if (expirationTime && Date.now() < parseInt(expirationTime)) {
+        if (accessToken) {
           try {
             const response = await fetch(`${apiUrl}/users/me`, {
               method: "GET",
@@ -25,24 +23,28 @@ const Header = ({ user, setUser, navigateToPage }) => {
             }
 
             const data = await response.json();
-            setUser(data.email);
+            setUser(data);
           } catch (error) {
             console.error(error);
           }
+        } else {
+          console.log("No access token found.");
         }
-      }
+      });
     };
 
     fetchUserData();
-  }, [user]);
+  }, []);
 
   const signOut = () => {
-    console.log("User signed out");
     setUser(null);
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
-    localStorage.removeItem("expiration");
-    window.location.reload();
+    chrome.runtime.sendMessage({ type: "LOGOUT_EXT" }, (response) => {
+      if (chrome.runtime.lastError) {
+          console.error("Error during logout:", chrome.runtime.lastError.message);
+      } else {
+          console.log("Logged out successfully:", response.message);
+      }
+    });
   };
 
   return (
@@ -52,6 +54,18 @@ const Header = ({ user, setUser, navigateToPage }) => {
             <li>
               <a href="#" onClick={() => navigateToPage('index')}>Home</a>
             </li>
+          {!user ? (
+            null
+          ) : (
+            <>
+              <li>
+                <a href="#" onClick={() => navigateToPage('keys')}>Keys</a>
+              </li>
+              <li>
+                <a href="#" onClick={() => navigateToPage('history')}>History</a>
+              </li>
+            </>
+          )}
           </ul>
 
         <div className={styles.authLinks}>
@@ -68,13 +82,10 @@ const Header = ({ user, setUser, navigateToPage }) => {
             </>
           ) : (
             <>
-              <span className={styles.username}>{user}</span>
+              <span className={styles.username}>{user.email}</span>
               <button
                 onClick={() => {
                   signOut();
-                  localStorage.removeItem("access");
-                  localStorage.removeItem("refresh");
-                  localStorage.removeItem("expiration");
                 }}
                 className={styles.signupButton}
               >

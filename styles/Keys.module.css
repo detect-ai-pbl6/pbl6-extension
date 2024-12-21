@@ -1,0 +1,141 @@
+.container {
+  width: 460px;
+  height: 520px;
+  background: linear-gradient(153deg, #e59bff, rgb(178, 255, 237) 74%);
+  padding: 5px;
+  color: black;
+  overflow-y: auto;
+}
+
+.keys-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+}
+
+.title, .subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.label {
+  font-size: 16px;
+}
+
+.select {
+  padding: 8px;
+  margin-left: 10px;
+  border-radius: 8px;
+  color: black;
+  border: 1px solid #ddd;
+}
+
+.table-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* margin-bottom: 20px; */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.table th:first-child,
+.table td:first-child {
+  color: #bb00ff;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.table th:last-child,
+.table td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.button-submit {
+  padding: 8px 12px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.button-submit:hover {
+  background-color: #0056b3;
+}
+
+.button {
+  padding: 3px 6px;
+  margin: 3px;
+  font-weight: normal;
+  transition: font-weight 0.3s;
+  border: none;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.button:hover {
+  font-weight: bold;
+}
+
+.button.update {
+  color: #007bff;
+}
+
+.button.delete {
+  color: #dc3545;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.pagination-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.pagination-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

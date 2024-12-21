@@ -10,19 +10,34 @@
     "48": "/icons/icon48.png",
     "192": "/icons/icon192.png"
   },
-  "permissions": [],
+  "permissions": [
+    "scripting", 
+    "tabs", 
+    "activeTab",
+    "bookmarks",
+    "extension",
+    "storage",
+    "https://pbl6.site/*",
+    "webRequest"],
   "web_accessible_resources": [
     {
       "resources": ["index.html"],
       "matches": ["<all_urls>"]
     }
   ],
+  "externally_connectable": {
+    "matches": ["*://*.google.com/*"]
+  },
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
-      "js": ["inject.js"]
+      "js": ["contentScripts.js"]
     }
   ],
+  "background":
+    {
+      "service_worker": "background.js"
+    },
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "index.html"
